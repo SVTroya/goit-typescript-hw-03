@@ -1,9 +1,5 @@
 class Key {
-  private readonly signature: string
-
-  constructor() {
-    this.signature = crypto.randomUUID()
-  }
+  private readonly signature: string = crypto.randomUUID()
 
   getSignature(): string {
     return this.signature
@@ -20,15 +16,16 @@ class Person {
 }
 
 abstract class House {
-  protected door: boolean
-  protected key: Key
-  protected tenants: Person[]
+  protected door: boolean = false
+  protected tenants: Person[] = []
 
-  comeIn(person: Person) {
+  constructor(protected key: Key) {
+  }
+
+  comeIn(person: Person): void {
     if (this.door) {
       this.tenants.push(person)
-    }
-    else{
+    } else {
       console.log("Door is closed!!!")
     }
   }
@@ -37,17 +34,12 @@ abstract class House {
 }
 
 class MyHouse extends House {
-  constructor(key: Key) {
-    super()
-    this.key = key
-  }
 
   openDoor(key: Key): void {
-    if(key.getSignature() === this.key.getSignature()){
+    if (key.getSignature() === this.key.getSignature()) {
       this.door = true
       console.log("Door is open. Please come in!")
-    }
-    else{
+    } else {
       console.log("You have wrong key. Please leave or we will call police!!!")
     }
   }
